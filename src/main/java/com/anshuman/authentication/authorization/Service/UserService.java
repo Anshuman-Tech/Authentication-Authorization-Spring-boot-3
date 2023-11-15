@@ -3,10 +3,10 @@ package com.anshuman.authentication.authorization.Service;
 import com.anshuman.authentication.authorization.Entity.User;
 import com.anshuman.authentication.authorization.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.process.internal.UserTypeResolution;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,5 +24,9 @@ public class UserService {
     public Optional<User> addUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(userRepository.save(user));
+    }
+
+    public Optional<List<User>> getUsers(){
+       return Optional.of(userRepository.findAll());
     }
 }
