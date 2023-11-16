@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class JwtHelper {
 
     //requirement :
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60; //Hour * min * sec
+    public static final long JWT_TOKEN_VALIDITY = 60; //Hour * min * sec
 
     //    public static final long JWT_TOKEN_VALIDITY =  60;
     private String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";

@@ -3,10 +3,14 @@ package com.anshuman.authentication.authorization.Controller;
 import com.anshuman.authentication.authorization.Configuration.CustomUserDetailsService;
 import com.anshuman.authentication.authorization.DTO.JwtRequest;
 import com.anshuman.authentication.authorization.DTO.JwtResponse;
+import com.anshuman.authentication.authorization.Entity.RefreshToken;
 import com.anshuman.authentication.authorization.Entity.User;
+import com.anshuman.authentication.authorization.Repository.RefreshTokenRepository;
 import com.anshuman.authentication.authorization.Security.JwtHelper;
+import com.anshuman.authentication.authorization.Security.RefreshTokenService;
 import com.anshuman.authentication.authorization.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +36,12 @@ public class UserController {
 
     @Autowired
     private JwtHelper jwtHelper;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -72,11 +82,17 @@ public class UserController {
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getEmailId());
 //        System.out.println("the returned user in the login api" + userDetails.getUsername()+ " " + userDetails.getPassword()+ " "+userDetails.getAuthorities());
+        //Get the access token created.
         String token = this.jwtHelper.generateToken(userDetails);
+
+        //Get the refresh token created.
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername()).getBody();
 
         JwtResponse response = JwtResponse.builder()
                 .accessToken(token)
-                .userName(userDetails.getUsername()).build();
+                .userName(userDetails.getUsername())
+                .refreshToken(refreshToken.getToken())
+                .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

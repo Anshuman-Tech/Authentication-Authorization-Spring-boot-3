@@ -37,7 +37,7 @@ public class SecurityConfig {
                     cors.disable();
                 })
                 .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/api/user/add","/api/home/","/api/user/loggedIn","/api/user/login").permitAll()
+                    auth.requestMatchers("/api/user/add","/api/home/","/api/user/loggedIn","/api/user/login","/api/refreshToken/updateAccessToken").permitAll()
 //                            .requestMatchers("/api/user/get").hasRole("Admin_User")
                             .anyRequest().authenticated();
                 })
